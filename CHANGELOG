@@ -1,0 +1,14 @@
+Change & Version Information
+============================
+
+The following is a summary of changes and improvements to
+:mod:`eulcommon`.  New features in each version should be listed, with
+any necessary information about installation or upgrade notes.
+
+
+Initial Release
+---------------
+
+* Split out and re-organized common, useful components
+  (:mod:`~eulcommon.binfile`, :mod:`~eulxml.djangoextras`) from
+  :mod:`eulcore` into :mod:`eulcommon` for easier re-use.

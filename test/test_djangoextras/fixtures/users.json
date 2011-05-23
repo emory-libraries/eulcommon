@@ -1,0 +1,19 @@
+[{
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+        "username": "staff",
+        "is_staff": true,
+        "is_superuser": false
+    }
+},
+{
+    "pk": 2,
+    "model": "auth.user",
+    "fields": {
+        "username": "super",
+        "is_staff": true,
+        "is_superuser": true
+    }
+}
+]
