@@ -1,0 +1,10 @@
+include *LICENSE*
+include CHANGELOG
+include README*
+include pip-dev-req.txt
+recursive-include doc Makefile *.rst *.py
+recursive-include test *.py
+recursive-include test/test_binfile *.py
+recursive-include test/test_binfile/fixtures *
+recursive-include test/test_djangoextras/ *.py
+recursive-include test/test_djangoextras/fixtures *

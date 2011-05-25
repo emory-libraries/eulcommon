@@ -1,36 +1,42 @@
-from distutils.command.build_py import build_py
-import os
-import sys
+#!/usr/bin/env python
+from setuptools import setup, find_packages
 
-from setuptools import setup
+from eulexistdb import __version__
 
-from eulcommon import __version__
+CLASSIFIERS = [
+    'Development Status :: 4 - Beta',
+    'Framework :: Django',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: Apache Software License',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Topic :: Utilities',
+]
 
-# fullsplit and packages calculation inspired by django setup.py
+LONG_DESCRIPTION = None
+try:
+    # read the description if it's there
+    with open('README.rst') as desc_f:
+        LONG_DESCRIPTION = desc_f.read()
+except:
+    pass
 
-def fullsplit(path):
-    result = []
-    while path:
-        path, tail = os.path.split(path)
-        result.append(tail)
-    result.reverse()
-    return result
-
-packages = []
-for path, dirs, files in os.walk(__file__):
-    if '.svn' in dirs:
-        dirs.remove('.svn')
-    if '__init__.py' in files:
-        packages.append(path.replace(os.path.sep, '.'))
 
 setup(
     name='eulcommon',
     version=__version__,
     author='Emory University Libraries',
     author_email='libsysdev-l@listserv.cc.emory.edu',
-    packages=packages,
-    package_dir={'': '.'},
+    url='https://github.com/emory-libraries/eulcommon',
+    license='Apache License, Version 2.0',
+    packages=find_packages(),
     install_requires=[
         'mimeparse',
     ],
+    description='A collection of small python utilities for working with binary files and Django',
+    long_description=LONG_DESCRIPTION,
+    classifiers=CLASSIFIERS,
+    keywords='Binary data'
 )
