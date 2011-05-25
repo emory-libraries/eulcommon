@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup, find_packages
 
-from eulexistdb import __version__
+from eulcommon import __version__
 
 CLASSIFIERS = [
     'Development Status :: 4 - Beta',
