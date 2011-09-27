@@ -25,6 +25,7 @@ from testcore import tests_from_modules, get_testsuite_runner
 test_modules = (
     'test_binfile',
     'test_djangoextras', 
+    'test_searchutil',
     )
 
 if __name__ == '__main__':

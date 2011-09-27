@@ -14,6 +14,7 @@ Contents
    :maxdepth: 3
    
    djangoextras
+   searchutil
    binfile
    changelog
 
