@@ -5,6 +5,11 @@ The following is a summary of changes and improvements to
 :mod:`eulcommon`.  New features in each version should be listed, with
 any necessary information about installation or upgrade notes.
 
+0.16.1 - template hotfix
+------------------------
+
+* Add missing pagination template to sdist
+
 0.16.0
 ------
 
