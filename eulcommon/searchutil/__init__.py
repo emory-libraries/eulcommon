@@ -16,9 +16,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-"""This module contains utilities for searching. Currently it exports only a
-single symbol, :func:`search_terms`.
-"""
+"""This module contains utilities for searching."""
 
 import logging
 from ply import lex
