@@ -1,13 +1,11 @@
-EULcore |release|
-=================
+EULcommon
+=========
 
-EULcommon is one of a collection of reusable Python_ components from
-`Emory University Libraries`_. The library contains both released and
-unreleased beta components. Except where noted otherwise, components
-documented here are released and ready for production use.
-
-.. _Python: http://www.python.org/
-.. _Emory University Libraries: http://web.library.emory.edu/
+EULcommon is a collection of common Python libraries in use at `Emory
+University Libraries <http://web.library.emory.edu/>`_. It's a bit
+miscellaneous: The libraries are collected together primarily to minimize
+proliferating many tiny projects. In future releases individual subpackages
+may be split out as they mature.
 
 Contents
 --------
@@ -15,9 +13,10 @@ Contents
 .. toctree::
    :maxdepth: 3
    
-   changelog
-   binfile
    djangoextras
+   searchutil
+   binfile
+   changelog
 
 
 Indices and tables
