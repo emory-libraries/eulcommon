@@ -5,6 +5,11 @@ The following is a summary of changes and improvements to
 :mod:`eulcommon`.  New features in each version should be listed, with
 any necessary information about installation or upgrade notes.
 
+0.16.2 - template hotfix redux
+------------------------------
+
+* Add missing pagination template to setup.py install
+
 0.16.1 - template hotfix
 ------------------------
 
