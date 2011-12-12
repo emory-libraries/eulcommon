@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from collections import defaultdict
+import os
 from setuptools import setup, find_packages
 
 from eulcommon import __version__
@@ -23,6 +25,15 @@ try:
 except:
     pass
 
+package_data = defaultdict(list)
+for path, dirs, files in os.walk('eulcommon'):
+    templates_idx = path.find('templates')
+    if templates_idx != -1:
+        package_path = path[:templates_idx].rstrip('/')
+        relative_path = path[templates_idx:]
+        targetfiles = [os.path.join(relative_path, f) for f in files]
+        package = package_path.replace('/', '.')
+        package_data[package].extend(targetfiles)
 
 setup(
     name='eulcommon',
@@ -32,6 +43,7 @@ setup(
     url='https://github.com/emory-libraries/eulcommon',
     license='Apache License, Version 2.0',
     packages=find_packages(),
+    package_data=package_data,
     install_requires=[
         'mimeparse',
     ],
