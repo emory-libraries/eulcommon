@@ -29,7 +29,7 @@ class FileTypeValidator(object):
     :class:`~django.core.exceptions.ValidationError` if the mimetype
     of the uploaded file is not in the list of allowed types.
 
-    :param types: list of acceptable mimetypes
+    :param types: list of acceptable mimetypes (defaults to empty list)
     :param message: optional error validation error message
 
     Example use::
@@ -41,7 +41,7 @@ class FileTypeValidator(object):
     '''
     allowed_types = []
 
-    def __init__(self, types, message=None):
+    def __init__(self, types=[], message=None):
         self.allowed_types = types
         if message is not None:
             self.message = message
@@ -54,10 +54,15 @@ class FileTypeValidator(object):
     def __call__(self, data):
         """
         Validates that the input matches the specified mimetype.
+
+        :param data: file data, expected to be an instance of
+	    :class:`django.core.files.uploadedfile.UploadedFile`;
+	    handles both
+	    :class:`~django.core.files.uploadedfile.TemporaryUploadedFile`
+            and :class:`~django.core.files.uploadedfile.InMemoryUploadedFile`.
         """
         # FIXME: check that data is an instance of 
         # django.core.files.uploadedfile.UploadedFile ?
-        
 
         # temporary file uploaded to disk (i.e., handled TemporaryFileUploadHandler)
         if hasattr(data, 'temporary_file_path'):
