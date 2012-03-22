@@ -4,7 +4,8 @@ register = template.Library()
 
 @register.inclusion_tag('searchutil/pagination.html')
 def pagination_links(paginator_page, show_pages, url_params=None,
-                     first_page_label=None, last_page_label=None):
+                     first_page_label=None, last_page_label=None,
+                     page_url=''):
     '''Django template tag to display pagination links for a paginated
     list of items.
 
@@ -19,6 +20,8 @@ def pagination_links(paginator_page, show_pages, url_params=None,
        list of pages to be shown)
      * optional last page label (only used when last page is not in
        list of pages to be shown)
+     * optional url to use for page links (only needed when the url is
+       different from the current one)
 
     Example use::
 
@@ -33,5 +36,6 @@ def pagination_links(paginator_page, show_pages, url_params=None,
         'url_params': url_params,
         'first_page_label': first_page_label,
         'last_page_label': last_page_label,
+        'page_url': page_url,
         }
 
