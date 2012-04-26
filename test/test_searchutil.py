@@ -18,7 +18,8 @@
 
 import unittest
 from django.core.paginator import Paginator
-from eulcommon.searchutil import search_terms, pages_to_show
+from eulcommon.searchutil import search_terms, parse_search_terms, \
+     pages_to_show
 from testcore import main
 
 class SearchTermsTest(unittest.TestCase):
@@ -34,6 +35,16 @@ class SearchTermsTest(unittest.TestCase):
 
         self.assertEqual(['extraneous', 'whitespace'],
                          search_terms('  extraneous      whitespace '))
+
+        # search_terms should ignore colons
+        self.assertEqual(['one', 'two:', 'three'],
+                         search_terms(' one two: three'))
+        # search_terms should ignore colons
+        self.assertEqual(['one', 'two:three', 'four'],
+                         search_terms(' one two:three four'))
+        self.assertEqual(['one', 'two:"three\tfour"', 'five'],
+                         search_terms(' one two:"three\tfour" five'))
+        
 
     def test_phrases(self):
         # quoted phrases
@@ -63,6 +74,31 @@ class SearchTermsTest(unittest.TestCase):
         self.assertEqual(['th*'], search_terms('th*'))
         self.assertEqual(['th?'], search_terms('th?'))
 
+class ParseSearchTermsTest(unittest.TestCase):
+
+    def test_words(self):
+        # search strings with single words
+        self.assertEqual([(None, 'word')], parse_search_terms('word'))
+        self.assertEqual([(None, 'multiple'), (None, 'words')],
+                         parse_search_terms('multiple words'))
+        self.assertEqual([(None, 'extraneous'), (None, 'whitespace')],
+                         parse_search_terms('   extraneous      whitespace '))
+
+    def test_phrases(self):
+        # quoted phrases
+        self.assertEqual([(None, 'exact phrase')],
+                         parse_search_terms('"exact phrase"'))
+
+    def test_fields(self):
+        self.assertEqual([('title', 'willows')],
+                         parse_search_terms('title:willows'))
+        
+        self.assertEqual([('title', 'willows'), ('title', 'wind')],
+                         parse_search_terms('title:willows title:wind'))
+        
+        self.assertEqual([(None, 'frog'), (None, 'toad'), ('title', 'willows'),
+                          ('title', 'wind')],
+                         parse_search_terms('frog toad title:willows title:wind'))
 
 
 class PagesToShowTest(unittest.TestCase):
