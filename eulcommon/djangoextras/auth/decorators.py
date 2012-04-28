@@ -23,7 +23,7 @@ from django.template import RequestContext
 from django.template.loader import get_template
 from django.utils.http import urlquote
 
-def user_passes_test_with_403(test_func, login_url=None):
+def user_passes_test_with_403(view_func, test_func, login_url=None):
     """
     View decorator that checks to see if the user passes the specified test.
     See :meth:`django.contrib.auth.decorators.user_passes_test`.
@@ -35,33 +35,32 @@ def user_passes_test_with_403(test_func, login_url=None):
     if not login_url:
         from django.conf import settings
         login_url = settings.LOGIN_URL
-    def _dec(view_func):
-        @wraps(view_func)
-        def _checklogin(request, *args, **kwargs):
-            if test_func(request.user):
-                return view_func(request, *args, **kwargs)
-            elif not request.user.is_authenticated():
-                return HttpResponseRedirect('%s?%s=%s' % (login_url,
-                            REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
-            else:
-                tpl = get_template('403.html')
-                return HttpResponseForbidden(tpl.render(RequestContext(request)))
-        return _checklogin
-    return _dec
 
-def permission_required_with_403(perm, login_url=None):
+    @wraps(view_func)
+    def _checklogin(request, *args, **kwargs):
+        if test_func(request.user):
+            return view_func(request, *args, **kwargs)
+        elif not request.user.is_authenticated():
+            return HttpResponseRedirect('%s?%s=%s' % (login_url,
+                        REDIRECT_FIELD_NAME, urlquote(request.get_full_path())))
+        else:
+            tpl = get_template('403.html')
+            return HttpResponseForbidden(tpl.render(RequestContext(request)))
+    return _checklogin
+
+def permission_required_with_403(view_func, perm, login_url=None):
     """
     Decorator for views that checks whether a user has a particular permission
     enabled, redirecting to the login page or rendering a 403 as necessary.
 
     See :meth:`django.contrib.auth.decorators.permission_required`.
     """
-    return user_passes_test_with_403(lambda u: u.has_perm(perm), login_url=login_url)
+    return user_passes_test_with_403(view_func, lambda u: u.has_perm(perm), login_url=login_url)
 
 # ajax permissions decorators adapted from
 # http://drpinkpony.wordpress.com/2010/02/02/django-ajax-authentication/
 
-def user_passes_test_with_ajax(test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
+def user_passes_test_with_ajax(view_func, test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
     """
     Decorator for views that checks that the user passes the given test,
     redirecting to the log-in page if necessary. The test should be a callable
@@ -76,24 +75,22 @@ def user_passes_test_with_ajax(test_func, login_url=None, redirect_field_name=RE
         from django.conf import settings
         login_url = settings.LOGIN_URL
 
-    def decorator(view_func):
-        @wraps(view_func)
-        def _check_user_test(request, *args, **kwargs):
-            if test_func(request.user):
-                return view_func(request, *args, **kwargs)
-            path = urlquote(request.get_full_path())
-            urlparts = login_url, redirect_field_name, path
-            # check for ajax request
-            if not request.is_ajax():
-                return HttpResponseRedirect('%s?%s=%s' % urlparts)
-            else:
-                # In case of ajax we send 401 - unauthorized HTTP response
-                return HttpResponse('%s?%s=%s' % urlparts, status=401)
+    @wraps(view_func)
+    def _check_user_test(request, *args, **kwargs):
+        if test_func(request.user):
+            return view_func(request, *args, **kwargs)
+        path = urlquote(request.get_full_path())
+        urlparts = login_url, redirect_field_name, path
+        # check for ajax request
+        if not request.is_ajax():
+            return HttpResponseRedirect('%s?%s=%s' % urlparts)
+        else:
+            # In case of ajax we send 401 - unauthorized HTTP response
+            return HttpResponse('%s?%s=%s' % urlparts, status=401)
 
-        return _check_user_test
-    return decorator
+    return _check_user_test
 
-def login_required_with_ajax(function=None, redirect_field_name=REDIRECT_FIELD_NAME):
+def login_required_with_ajax(view_func, function=None, redirect_field_name=REDIRECT_FIELD_NAME):
     """
     Decorator for views that checks that the user is logged in, redirecting
     to the log-in page if necessary, but returns a special response for ajax requests.
@@ -101,13 +98,13 @@ def login_required_with_ajax(function=None, redirect_field_name=REDIRECT_FIELD_N
     """
     if function is None:
         function = lambda u: u.is_authenticated()
-    return user_passes_test_with_ajax(function, redirect_field_name=redirect_field_name)
+    return user_passes_test_with_ajax(view_func, function, redirect_field_name=redirect_field_name)
 
-def permission_required_with_ajax(perm, login_url=None):
+def permission_required_with_ajax(view_func, perm, login_url=None):
     """
     Decorator for views that checks whether a user has a particular permission
     enabled, redirecting to the log-in page if necessary, but returns a special
     response for ajax requests.  See :meth:`eulcore.django.auth.decorators.user_passes_test_with_ajax`.
     """
-    return user_passes_test_with_ajax(lambda u: u.has_perm(perm), login_url=login_url)
+    return user_passes_test_with_ajax(view_func, lambda u: u.has_perm(perm), login_url=login_url)
 
