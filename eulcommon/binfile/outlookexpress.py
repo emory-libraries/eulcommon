@@ -209,9 +209,6 @@ class MacFolder(object):
         if self.data:
             for msginfo in self.index.messages:
                 msg = self.data.get_message(msginfo.offset, msginfo.size)
-                if msg.deleted:
-                    print 'deleted message at offset %s size %s' % (hex(msginfo.offset),
-                                                                    hex(msginfo.size))
                 yield self.data.get_message(msginfo.offset, msginfo.size)
 
     @property
