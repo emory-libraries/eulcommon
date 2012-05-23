@@ -139,10 +139,15 @@ class MacMailMessage(binfile.BinaryStructure):
 	:attr:`data` correctly.
         
     '''
-    MAGIC_NUMBER = 'MSum'
-    '''Magic Number for a single message within an Outlook Express 4.5
-    for Macintosh folder Mail content file'''
-    _magic_num = binfile.ByteField(0, 4)  # should match magic number
+    header_type = binfile.ByteField(0, 4)
+    '''Each mail message begins with a header, starting with either
+    ``MSum`` (message summary, perhaps) or ``MDel`` for deleted
+    messages.'''
+
+    MESSAGE = 'MSum'
+    'Header string indicating a normal message'
+    DELETED_MESSAGE = 'MDel'
+    'Header string indicating a deleted message'
     
     content_offset = binfile.IntegerField(5, 8)
     '''offset within this message block where the message summary
@@ -152,10 +157,10 @@ class MacMailMessage(binfile.BinaryStructure):
         self.size = size
         super(MacMailMessage, self).__init__(*args, **kwargs)
 
-    def sanity_check(self):
-        if self._magic_num != self.MAGIC_NUMBER:
-            logger.debug('Message block sanity check failed')
-        return self._magic_num == self.MAGIC_NUMBER
+    @property
+    def deleted(self):
+        'boolean flag indicating if this is a deleted message'
+        return self.header_type == self.DELETED_MESSAGE
 
     @property
     def data(self):
@@ -196,19 +201,36 @@ class MacFolder(object):
         return self.index.total_messages
 
     @property
-    def messages(self):
-        '''A generator yielding an :class:`email.message.Message` for
-        each message in this folder, based on message index
+    def raw_messages(self):
+        '''A generator yielding an :class:`MacMailMessage` binary
+        object for each message in this folder, based on message index
         information in :class:`MacIndex` and content in
         :class:`MacMail`.'''
         if self.data:
             for msginfo in self.index.messages:
                 msg = self.data.get_message(msginfo.offset, msginfo.size)
-                if not msg.sanity_check():
-                    print 'sanity check failed, magic number is %s' % \
-                          msg._magic_num
-                yield msg.as_email()
+                if msg.deleted:
+                    print 'deleted message at offset %s size %s' % (hex(msginfo.offset),
+                                                                    hex(msginfo.size))
+                yield self.data.get_message(msginfo.offset, msginfo.size)
 
-    # NOTE: we may want to add a raw_messages generator at some point
-    # to return the binary MacMailMessage, e.g. if we determine what
-    # the other portions of the binary message summary signify
+    @property
+    def messages(self):
+        '''A generator yielding an :class:`email.message.Message` for
+        each message in this folder, based on message index
+        information in :class:`MacIndex` and content in
+        :class:`MacMail`.  Does **not** include deleted messages.'''
+        return self._messages()
+
+    @property
+    def all_messages(self):
+        '''Same as :attr:`messages` except deleted messages are included.'''
+        return self._messages(skip_deleted=False)
+
+    def _messages(self, skip_deleted=True):
+        # common logic for messages / all_messages
+        for raw_msg in self.raw_messages:
+            if skip_deleted and raw_msg.deleted:
+                continue
+            yield raw_msg.as_email()
+

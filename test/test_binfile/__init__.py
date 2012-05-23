@@ -16,3 +16,4 @@
 
 from test_binfile.test_core import *
 from test_binfile.test_eudora import *
+from test_binfile.test_outlookexpress import *

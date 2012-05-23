@@ -34,7 +34,7 @@ class TestMacIndex(unittest.TestCase):
     def test_basic_properties(self):
         idx = outlookexpress.MacIndex(self.index_filename)
 
-        self.assertEqual(1, idx.total_messages)
+        self.assertEqual(2, idx.total_messages)
         self.assertTrue(idx.sanity_check())
 
         not_idx = outlookexpress.MacIndex(self.data_filename)
@@ -43,7 +43,7 @@ class TestMacIndex(unittest.TestCase):
     def test_messages(self):
         idx = outlookexpress.MacIndex(self.index_filename)
         messages = list(idx.messages)
-        self.assertEqual(len(messages), 1)
+        self.assertEqual(len(messages), 2)
 
         self.assertTrue(isinstance(messages[0], outlookexpress.MacIndexMessage))
 
@@ -82,24 +82,33 @@ class TestMacFolder(unittest.TestCase):
                           TEST_ROOT)
 
     def test_count(self):
-        self.assertEqual(1, self.folder.count)
+        self.assertEqual(2, self.folder.count)
 
     def test_messages(self):
-        msgs = list(self.folder.messages())
+        msgs = list(self.folder.messages)
         self.assertEqual(self.folder.count, len(msgs))
         msg = msgs[0]
         self.assert_(isinstance(msg, message.Message))
 
         # check email content to test size & offset handling
-        self.assertEqual('Hi!', msg.get('Subject'))
-        self.assertEqual('"Somebody" <somebody@example.com>', msg.get('From'))
-        self.assertEqual('someone@nowhere.org', msg.get('To'))
+        self.assertEqual('Hi!', msg['Subject'])
+        self.assertEqual('"Somebody" <somebody@example.com>', msg['From'])
+        self.assertEqual('someone@nowhere.org', msg['To'])
         self.assertEqual('This is a test email generated with Outlook Express 4.5 for Mac.',
                          msg.get_payload())
+        msg2 = msgs[1]
+        self.assertEqual('hello again', msg2['Subject'])
 
         # if data is not set/unavailable
         self.folder.data = None
-        self.assertEqual([], list(self.folder.messages()))
+        self.assertEqual([], list(self.folder.messages))
+
+    def test_raw_messages(self):
+        raw_msgs = list(self.folder.raw_messages)
+        self.assertEqual(self.folder.count, len(raw_msgs))
+        self.assert_(isinstance(raw_msgs[0], outlookexpress.MacMailMessage))
+        self.assertFalse(raw_msgs[0].deleted)
+        
 
                           
 if __name__ == '__main__':
