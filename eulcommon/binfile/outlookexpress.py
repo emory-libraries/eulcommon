@@ -177,7 +177,12 @@ class MacMailMessage(binfile.BinaryStructure):
 
 class MacFolder(object):
     '''Wrapper object for an Outlook Express 4.5 for Mac folder, with
-    a :class:`MacIndex` and optional ``MacMail``.
+    a :class:`MacIndex` and an optional :class:`MacMail`.
+
+    :param folder_path: path to the Outlook Express 4.5 folder
+        directory, which must contain at least an ``Index`` file (and
+        probably a ``Mail`` file, for non-empty folders)
+
     '''
 
     index = None
@@ -202,7 +207,7 @@ class MacFolder(object):
 
     @property
     def raw_messages(self):
-        '''A generator yielding an :class:`MacMailMessage` binary
+        '''A generator yielding a :class:`MacMailMessage` binary
         object for each message in this folder, based on message index
         information in :class:`MacIndex` and content in
         :class:`MacMail`.'''
