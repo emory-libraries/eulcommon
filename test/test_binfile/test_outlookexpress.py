@@ -109,6 +109,9 @@ class TestMacFolder(unittest.TestCase):
         self.assert_(isinstance(raw_msgs[0], outlookexpress.MacMailMessage))
         self.assertFalse(raw_msgs[0].deleted)
         
+        # skipped chunks should be populated now; 0 for fixture folder
+        self.assertEqual(0, self.folder.skipped_chunks)
+        
 
                           
 if __name__ == '__main__':

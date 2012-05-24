@@ -205,6 +205,10 @@ class MacFolder(object):
         'Number of email messages in this folder'
         return self.index.total_messages
 
+    skipped_chunks = None
+    '''Number of data chunks skipped between raw messages, based on
+    offset and size.  (Only set after iterating through messages.)'''
+
     @property
     def raw_messages(self):
         '''A generator yielding a :class:`MacMailMessage` binary
@@ -212,9 +216,24 @@ class MacFolder(object):
         information in :class:`MacIndex` and content in
         :class:`MacMail`.'''
         if self.data:
+            # offset for first message, at end of Mail data file header
+            last_offset = 24  
+            self.skipped_chunks = 0
+            
             for msginfo in self.index.messages:
                 msg = self.data.get_message(msginfo.offset, msginfo.size)
-                yield self.data.get_message(msginfo.offset, msginfo.size)
+                # Index file seems to references messages in order by
+                # offset; check for data skipped between messages.
+                if msginfo.offset > last_offset:
+                    logger.debug('Skipped %d bytes between %s (%s) and %s (%s)' % \
+                          (msginfo.offset - last_offset,
+                           last_offset, hex(last_offset),
+                           msginfo.offset, hex(msginfo.offset)))
+                    
+                    self.skipped_chunks += 1
+                last_offset = msginfo.offset + msginfo.size
+                                                 
+                yield msg
 
     @property
     def messages(self):
