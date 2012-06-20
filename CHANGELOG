@@ -5,8 +5,8 @@ The following is a summary of changes and improvements to
 :mod:`eulcommon`.  New features in each version should be listed, with
 any necessary information about installation or upgrade notes.
 
-0.17.0 (dev)
-------------------------------
+0.17.0
+------
 
 * :mod:`~eulcommon.searchutil` can now parse **field:value** pairs in
   search term strings.  See
