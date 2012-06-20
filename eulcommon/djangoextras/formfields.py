@@ -74,6 +74,7 @@ class W3CDateWidget(Widget):
                 date += '-%s' % d
         return date
 
+    # TODO: split out logic so it is easier to extend and customize display
     def render(self, name, value, attrs=None):
         '''Render the widget as HTML inputs for display on a form.
 
@@ -119,6 +120,7 @@ class W3CDateWidget(Widget):
         :param extra_attrs: any extra widget attributes
         :returns: rendered HTML output for the text input
         '''
+        # TODO: move id-generation logic out for re-use
         if 'id' in self.attrs:
             id_ = self.attrs['id']
         else:

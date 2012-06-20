@@ -46,6 +46,7 @@ setup(
     package_data=package_data,
     install_requires=[
         'mimeparse',
+        'python-magic',
     ],
     description='A collection of small python utilities for working with binary files and Django',
     long_description=LONG_DESCRIPTION,

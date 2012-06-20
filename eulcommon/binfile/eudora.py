@@ -1,4 +1,4 @@
-# file eulcommon/binfile/core.py
+# file eulcommon/binfile/eudora.py
 #
 #   Copyright 2011 Emory University General Library
 #
@@ -19,7 +19,7 @@ Python objects.
 
 The `Eudora <http://en.wikipedia.org/wiki/Eudora_(e-mail_client)>`_ email
 client has a long history through the early years of email. It supported
-versions for early Mac systems as well as early Windows OSes. Unfortuntely,
+versions for early Mac systems as well as early Windows OSes. Unfortunately,
 most of them use binary file formats that are entirely incompatible with one
 another. This module is aimed at one day reading all of them, but for now
 practicality and immediate needs demand that it focus on the files saved by

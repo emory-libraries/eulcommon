@@ -19,15 +19,20 @@
 """This module contains utilities for searching."""
 
 import logging
-from ply import lex
+from ply import lex, yacc
+import re
 
-__all__ = ('search_terms', 'pages_to_show')
+__all__ = ('search_terms', 'pages_to_show', 'parse_search_terms')
 
 logger = logging.getLogger(__name__)
 
-tokens = ('WORD', 'PHRASE')
+# lex rules
 
-t_WORD = r'[^\s"]+'
+tokens = ('WORD', 'PHRASE', 'COLON', 'SPACE') 
+
+t_COLON = r':'
+t_SPACE = r'\s+'
+t_WORD = r'[^\s:"]+'
 
 @lex.TOKEN(r'"[^"]*"')
 def t_PHRASE(t):
@@ -39,14 +44,101 @@ def t_error(t):
     logger.debug('skipping illegal/unmatched character ' + repr(t.value[0]))
     t.lexer.skip(1)
 
+# parse rules
+
+def p_terms_empty(p):
+    '''
+    Terms :
+    '''
+    p[0] = []
+
+def p_terms_single(p):
+    '''
+    Terms : Term
+    '''
+    p[0] = [p[1]]
+
+def p_terms_leading_space(p):
+    '''
+    Terms : SPACE Terms
+    '''
+    p[0] = p[2]
+
+def p_terms_multiple(p):
+    '''
+    Terms : Term SPACE Terms
+    '''
+    p[0] = [p[1]]
+    p[0].extend(p[3])
+
+def p_term_single(p):
+    '''
+    Term : WORD
+    	 | PHRASE
+    '''
+    p[0] = (None, p[1])
+
+def p_term_field(p):
+    '''
+    Term : WORD COLON WORD
+         | WORD COLON PHRASE
+    '''
+    p[0] = (p[1], p[3])
+
+def p_term_incomplete_field(p):
+    '''
+    Term : WORD COLON 
+    '''
+    p[0] = (p[1], None)
+
+
+def p_error(p):
+    raise RuntimeError("Syntax error at '%s'" % repr(p))
+
+searchlexer = lex.lex()
+searchparser = yacc.yacc()
+
+def parse_search_terms(q):
+    '''Parse a string of search terms into keywords, phrases, and
+    field/value pairs.  Use quotes (**" "**) to designate phrases and
+    **field:value** or **field:"term term"** to designated field value
+    pairs.  Returns a list of tuples where the first value is the
+    field, or None for a word or phrase, second value is the keyword
+    or phrase.  Incomplete field value pairs will return a tuple with
+    None for the value.  For example::
+
+      parse_search_terms('grahame "frog and toad" title:willows')
+
+    Would result in::
+
+      [(None,'grahame'), (None, 'frog and toad'), ('title', 'willows')]
+    
+    '''
+    return searchparser.parse(q, lexer=searchlexer)
+
 def search_terms(q):
     '''Takes a search string and parses it into a list of keywords and
     phrases.'''
-    lexer = lex.lex()
-    lexer.input(q)
+    tokens = parse_search_terms(q)
     # iterate through all the tokens and make a list of token values
     # (which are the actual words and phrases)
-    return [ tok.value for tok in iter(lexer.token, None) ]
+    values = []
+    for t in tokens:
+        # word/phrase
+        if t[0] is None:  
+            values.append(t[1])
+        # incomplete field
+        elif t[1] is None:
+            values.append('%s:' % t[0])
+        # anything else must be a field, value pair
+        # - if value includes whitespace, wrap in quotes
+        elif re.search('\s', t[1]):
+            values.append('%s:"%s"' % t)
+        # otherwise, leave unquoted
+        else:
+            values.append('%s:%s' % t)
+    return values
+    return [t[1] if t[0] is None else '%s:"%s"' % t for t in tokens]
 
 
 def pages_to_show(paginator, page, page_labels={}):

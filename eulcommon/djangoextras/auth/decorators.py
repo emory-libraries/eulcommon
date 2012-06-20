@@ -61,7 +61,8 @@ def permission_required_with_403(perm, login_url=None):
 # ajax permissions decorators adapted from
 # http://drpinkpony.wordpress.com/2010/02/02/django-ajax-authentication/
 
-def user_passes_test_with_ajax(test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
+def user_passes_test_with_ajax(test_func, login_url=None,
+                               redirect_field_name=REDIRECT_FIELD_NAME):
     """
     Decorator for views that checks that the user passes the given test,
     redirecting to the log-in page if necessary. The test should be a callable
@@ -71,6 +72,14 @@ def user_passes_test_with_ajax(test_func, login_url=None, redirect_field_name=RE
 
     To use with class methods instead of functions, use :meth:`django.utils.decorators.method_decorator`.  See
     http://docs.djangoproject.com/en/dev/releases/1.2/#user-passes-test-login-required-and-permission-required
+
+    Usage is the same as
+    :meth:`django.contrib.auth.decorators.user_passes_test`::
+
+    	@user_passes_test_with_ajax(lambda u: u.has_perm('polls.can_vote'), login_url='/loginpage/')
+        def my_view(request):
+            ...
+
     """
     if not login_url:
         from django.conf import settings
@@ -95,19 +104,39 @@ def user_passes_test_with_ajax(test_func, login_url=None, redirect_field_name=RE
 
 def login_required_with_ajax(function=None, redirect_field_name=REDIRECT_FIELD_NAME):
     """
-    Decorator for views that checks that the user is logged in, redirecting
-    to the log-in page if necessary, but returns a special response for ajax requests.
-    See :meth:`eulcore.django.auth.decorators.user_passes_test_with_ajax`.
+    Decorator for views that checks that the user is logged in,
+    redirecting to the log-in page if necessary, but returns a special
+    response for ajax requests.  See
+    :meth:`eulcommon.djangoextras.auth.decorators.user_passes_test_with_ajax`.
+
+    Example usage::
+
+        @login_required_with_ajax()
+        def my_view(request):
+            ...
+    
     """
+    # NOTE: currently only this format works: @login_required_with_ajax()
+    # But this format errors: @login_required_with_ajax
     if function is None:
         function = lambda u: u.is_authenticated()
     return user_passes_test_with_ajax(function, redirect_field_name=redirect_field_name)
+    
 
 def permission_required_with_ajax(perm, login_url=None):
     """
-    Decorator for views that checks whether a user has a particular permission
-    enabled, redirecting to the log-in page if necessary, but returns a special
-    response for ajax requests.  See :meth:`eulcore.django.auth.decorators.user_passes_test_with_ajax`.
+    Decorator for views that checks whether a user has a particular
+    permission enabled, redirecting to the log-in page if necessary,
+    but returns a special response for ajax requests.  See
+    :meth:`eulcore.django.auth.decorators.user_passes_test_with_ajax`.
+
+    Usage is the same as
+    :meth:`django.contrib.auth.decorators.permission_required` ::
+    
+        @permission_required_with_ajax('polls.can_vote', login_url='/loginpage/')
+        def my_view(request):
+            ...
+            
     """
     return user_passes_test_with_ajax(lambda u: u.has_perm(perm), login_url=login_url)
 

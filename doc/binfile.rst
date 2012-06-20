@@ -14,6 +14,7 @@
    :maxdepth: 1
 
    Eudora index files <binfile/eudora>
+   Outlook Express 4.5 for Macintosh folder files <binfile/outlookexpress>
    
 
 General Usage

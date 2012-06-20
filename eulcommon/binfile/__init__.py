@@ -14,4 +14,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import warnings
+warnings.warn('eulcommon.binfile is deprecated and will be removed in the next release; bodatools.binfile should be used instead', DeprecationWarning)
+
 from eulcommon.binfile.core import *
