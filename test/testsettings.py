@@ -16,6 +16,8 @@
 
 # django settings file
 
+SECRET_KEY = 'not that secret but is now required!~'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

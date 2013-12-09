@@ -5,6 +5,13 @@ The following is a summary of changes and improvements to
 :mod:`eulcommon`.  New features in each version should be listed, with
 any necessary information about installation or upgrade notes.
 
+0.18
+----
+
+* Custom auth decorators in :mod:`eulcommon.djangoextras.auth.decorators`
+  now have the capacity to take additional view parameters, with fallback
+  to old behavior for compatibility
+
 0.17.0
 ------
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # file test_djangoextras/test_formfields.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,11 +68,11 @@ class W3CDateWidgetTest(unittest.TestCase):
         self.assert_(re.match(r'<input.*>.*\/.*<input.*>.*\/.*<input.*>', inputs,
             re_flags), 'render output has 3 inputs separated by /')
 
-        self.assert_(re.match(r'<input.*name="date_year".*maxlength="4"', inputs, re_flags),
+        self.assert_(re.match(r'<input.*maxlength="4".*name="date_year"', inputs, re_flags),
             'year input is in rendered widget output with max length of 4')
-        self.assert_(re.match(r'<input.*name="date_month".*maxlength="2"', inputs, re_flags),
+        self.assert_(re.match(r'<input.*maxlength="2".*name="date_month"', inputs, re_flags),
             'month input is in rendered widget output with max length of 2')
-        self.assert_(re.match(r'<input.*name="date_day".*maxlength="2"', inputs, re_flags),
+        self.assert_(re.match(r'<input.*maxlength="2".*name="date_day"', inputs, re_flags),
             'day input is in rendered widget output with max length of 2')
 
         # invalid initial value results in default MM DD YYYY placeholder values.
@@ -133,7 +133,7 @@ class DynamicChoiceFieldTest(unittest.TestCase):
         self.assertEqual(other_choices(), self.field.choices)
         # updating field choices also updates widget choices
         self.assertEqual(other_choices(), self.field.widget.choices)
-          
+
 
 if __name__ == '__main__':
     main()
