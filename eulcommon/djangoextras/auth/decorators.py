@@ -1,5 +1,5 @@
 # file eulcommon/djangoextras/auth/decorators.py
-# 
+#
 #   Copyright 2010,2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,7 +88,12 @@ def user_passes_test_with_ajax(test_func, login_url=None,
     def decorator(view_func):
         @wraps(view_func)
         def _check_user_test(request, *args, **kwargs):
-            if test_func(request.user):
+            try:
+                test_result = test_func(request.user, request=request, *args, **kwargs)
+            except TypeError as err:
+                test_result = test_func(request.user)
+
+            if test_result:
                 return view_func(request, *args, **kwargs)
             path = urlquote(request.get_full_path())
             urlparts = login_url, redirect_field_name, path
@@ -114,14 +119,14 @@ def login_required_with_ajax(function=None, redirect_field_name=REDIRECT_FIELD_N
         @login_required_with_ajax()
         def my_view(request):
             ...
-    
+
     """
     # NOTE: currently only this format works: @login_required_with_ajax()
     # But this format errors: @login_required_with_ajax
     if function is None:
         function = lambda u: u.is_authenticated()
     return user_passes_test_with_ajax(function, redirect_field_name=redirect_field_name)
-    
+
 
 def permission_required_with_ajax(perm, login_url=None):
     """
@@ -132,11 +137,11 @@ def permission_required_with_ajax(perm, login_url=None):
 
     Usage is the same as
     :meth:`django.contrib.auth.decorators.permission_required` ::
-    
+
         @permission_required_with_ajax('polls.can_vote', login_url='/loginpage/')
         def my_view(request):
             ...
-            
+
     """
     return user_passes_test_with_ajax(lambda u: u.has_perm(perm), login_url=login_url)
 
