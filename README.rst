@@ -1,6 +1,14 @@
 EULcommon
 =========
 
+   
+.. image:: https://pypip.in/version/eulcommon/badge.png  
+   :target: https://pypi.python.org/pypi/eulcommon
+
+.. image:: https://pypip.in/license/eulcommon/badge.png
+
+.. image:: https://pypip.in/download/eulcommon/badge.png
+
 EULcommon is a `Python <http://www.python.org/>`_ module with a few
 small utilities that might be useful to others, but were not large or
 significant enough to warrant splitting out into their own
