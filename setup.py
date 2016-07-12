@@ -48,6 +48,8 @@ setup(
         'mimeparse',
         'python-magic',
     ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'django', 'mock'],
     description='A collection of small python utilities for working with binary files and Django',
     long_description=LONG_DESCRIPTION,
     classifiers=CLASSIFIERS,

@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 # file test_djangoextras/test_validators.py
-# 
+#
 #   Copyright 2012 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +20,7 @@ from mock import Mock
 import os
 
 from eulcommon.djangoextras.validators import FileTypeValidator
-from testcore import main
+
 
 class TestFileTypeValidator(unittest.TestCase):
 
@@ -31,7 +29,7 @@ class TestFileTypeValidator(unittest.TestCase):
 
     def setUp(self):
         self.text_val = FileTypeValidator(types=['text/plain'])
-        
+
         self.pdf_val = FileTypeValidator(types=['application/pdf'],
                                      message='Bad file!')
         self.pdf_or_text_val = FileTypeValidator(types=['application/pdf', 'text/plain'],
@@ -46,7 +44,7 @@ class TestFileTypeValidator(unittest.TestCase):
         self.pdf_or_text_val(mockfile)
         # not valid as text
         self.assertRaises(ValidationError, self.text_val, mockfile)
-        
+
 
     def test_memory_file(self):
         data = {'content': 'this looks like plain text'}
@@ -59,7 +57,7 @@ class TestFileTypeValidator(unittest.TestCase):
         class TestDataObject:
             def __init__(self, content):
                 self.content = content
-            
+
             def read(self):
                 return self.content
 
@@ -69,7 +67,7 @@ class TestFileTypeValidator(unittest.TestCase):
         self.pdf_or_text_val(data)
         # not valid as pdf
         self.assertRaises(ValidationError, self.pdf_val, data)
-        
-        
+
+
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
 # file testsettings.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +15,9 @@
 #   limitations under the License.
 
 # django settings file
+import os
+import django
+
 
 SECRET_KEY = 'not that secret but is now required!~'
 
@@ -25,6 +28,14 @@ DATABASES = {
     }
 }
 
+INSTALLED_APPS = (
+    'eulcommon',
+    # errors on django 1.9 if contenttypes is not included here
+    'django.contrib.auth',
+    'django.contrib.contenttypes'
+)
+
+
 
 # suppress normal template context processing
 # for tests that render templates
@@ -32,3 +43,9 @@ TEMPLATE_CONTEXT_PROCESSORS = []
 
 # output dir for xml tests
 TEST_OUTPUT_DIR = 'test-results'
+
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'test.testsettings'
+# run django setup if we are on a version of django that has it
+if hasattr(django, 'setup'):
+    django.setup()

@@ -5,6 +5,11 @@ The following is a summary of changes and improvements to
 :mod:`eulcommon`.  New features in each version should be listed, with
 any necessary information about installation or upgrade notes.
 
+0.19
+----
+
+* Update tests for current versions of Django and to use py.test
+
 0.18
 ----
 

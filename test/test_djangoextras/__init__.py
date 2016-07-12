@@ -1,5 +1,5 @@
 # file test_djangoextras/__init__.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,3 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from test_djangoextras.test_http import *
-from test_djangoextras.test_auth import *
-from test_djangoextras.test_formfields import *
-from test_djangoextras.test_validators import *

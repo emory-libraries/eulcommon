@@ -30,6 +30,14 @@ License
 **eulcommon** is distributed under the Apache 2.0 License.
 
 
+Unit Tests
+----------
+
+Unit tests can be run with ``py.test``, and include options for
+generating xml and coverage reports for continuous integration::
+
+    py.test --junitxml=unittests.xml --cov=eulcommon
+
 Development History
 -------------------
 

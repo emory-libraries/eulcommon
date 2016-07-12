@@ -4,3 +4,5 @@ coverage
 django
 mock
 ply
+pytest
+pytest-cov

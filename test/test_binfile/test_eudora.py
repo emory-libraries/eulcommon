@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 # file test_binfile/test_eudora.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +18,6 @@ import unittest
 import os
 
 from eulcommon.binfile import eudora
-from testcore import main
 
 TEST_ROOT = os.path.dirname(__file__)
 def fixture(fname):
@@ -33,7 +30,7 @@ class TestEudora(unittest.TestCase):
 
         self.assertEqual(obj.version, 1)
         self.assertEqual(obj.name, 'In')
-        
+
         messages = list(obj.messages)
         self.assertEqual(len(messages), 2)
 

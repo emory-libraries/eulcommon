@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 # file test_djangoextras/test_http.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +14,6 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from testcore import main
 
 from unittest import TestCase
 from django.http import HttpResponse, HttpRequest
@@ -43,7 +40,7 @@ class ContentNegotiationTest(TestCase):
 
     def setUp(self):
         self.request = HttpRequest()
-        
+
         # add content negotiation to test view defined above for testing
         decorator = content_negotiation({'application/xml': xml_view})
         self.negotiated_view = decorator(html_view)
