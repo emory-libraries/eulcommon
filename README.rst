@@ -1,6 +1,22 @@
 EULcommon
 =========
 
+  .. image:: https://travis-ci.org/emory-libraries/eulcommon.svg?branch=develop
+     :target: https://travis-ci.org/emory-libraries/eulcommon
+     :alt: Travis-CI Build
+
+  .. image:: https://coveralls.io/repos/github/emory-libraries/eulcommon/badge.svg?branch=develop
+     :target: https://coveralls.io/github/emory-libraries/eulcommon?branch=develop
+     :alt: Code Coverage
+
+  .. image:: https://landscape.io/github/emory-libraries/eulcommon/develop/landscape.svg?style=flat
+     :target: https://landscape.io/github/emory-libraries/eulcommon/develop
+     :alt: Code Health
+
+  .. image:: https://requires.io/github/emory-libraries/eulcommon/requirements.svg?branch=develop
+     :target: https://requires.io/github/emory-libraries/eulcommon/requirements/?branch=develop
+     :alt: Requirements Status
+
 EULcommon is a `Python <http://www.python.org/>`_ module with a few
 small utilities that might be useful to others, but were not large or
 significant enough to warrant splitting out into their own
