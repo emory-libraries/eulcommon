@@ -36,7 +36,7 @@ for path, dirs, files in os.walk('eulcommon'):
         package_data[package].extend(targetfiles)
 
 test_requirements = [
-    'mock'
+    'mock',
     'ply',
     'pytest',
     'pytest-cov'
