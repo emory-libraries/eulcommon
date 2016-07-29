@@ -35,6 +35,15 @@ for path, dirs, files in os.walk('eulcommon'):
         package = package_path.replace('/', '.')
         package_data[package].extend(targetfiles)
 
+test_requirements = [
+    'mock'
+    'ply',
+    'pytest',
+    'pytest-cov'
+]
+
+dev_requirements = test_requirements + ['django', 'sphinx']
+
 setup(
     name='eulcommon',
     version=__version__,
@@ -50,6 +59,10 @@ setup(
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'django', 'mock'],
+    extras_require={
+        'test': test_requirements,
+        'dev': dev_requirements
+    },
     description='A collection of small python utilities for working with binary files and Django',
     long_description=LONG_DESCRIPTION,
     classifiers=CLASSIFIERS,

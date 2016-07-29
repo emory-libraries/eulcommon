@@ -30,8 +30,23 @@ License
 **eulcommon** is distributed under the Apache 2.0 License.
 
 
+Developer Notes
+---------------
+
+To install dependencies for your local check out of the code, run ``pip install``
+in the ``eulcommon`` directory (the use of `virtualenv`_ is recommended)::
+
+    pip install -e .
+
+.. _virtualenv: http://www.virtualenv.org/en/latest/
+
+If you want to run unit tests or build sphinx documentation, you should also
+install development dependencies::
+
+    pip install -e . "eulfedora[dev]"
+
 Unit Tests
-----------
+^^^^^^^^^^
 
 Unit tests can be run with ``py.test``, and include options for
 generating xml and coverage reports for continuous integration::
