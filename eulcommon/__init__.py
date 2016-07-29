@@ -20,3 +20,7 @@ __version_info__ = (0, 19, 0, 'develop')
 __version__ = '.'.join([ str(i) for i in __version_info__[:-1] ])
 if __version_info__[-1] is not None:
     __version__ += ('-%s' % (__version_info__[-1],))
+
+
+# configure default django app
+default_app_config = 'eulcommon.apps.EulcommonConfig'
