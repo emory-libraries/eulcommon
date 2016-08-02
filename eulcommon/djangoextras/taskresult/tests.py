@@ -17,14 +17,19 @@
 
 from time import sleep
 from celery.signals import task_prerun, task_postrun
+from django import VERSION as django_version
 from django.core.urlresolvers import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
+import pytest
 
 from .models import TaskResult
 
 # ensure testsettings are loaded
 # NOTE: could cause problems if tests are run in another context (?)
 import test_setup
+
+
+# if django_version < (1, 8):
 
 
 class TaskResultTestCase(TestCase):
@@ -46,9 +51,13 @@ class TaskResultTestCase(TestCase):
             'task end time should be set based on celery task_postrun signal')
         self.assertEqual(task_time, tr.duration.seconds)
 
+    # NOTE: as of August 2016 with django-celery==3.1.17,
+    # django-celery is attempting to import get_cache, which has been removed
+    # from django as of Django 1.9
+    # (parts of the test work, but displaying the task details fails)
+    @pytest.mark.skipif(django_version >= (1, 9),
+                        reason="django-celery not yet Django 1.9 compatible")
     def test_view_recent(self):
-        from django.conf import settings
-        print settings.TEMPLATE_DIRS
         # no tasks to display
         response = self.client.get(reverse('tasks:recent'))
         self.assertContains(response, 'No recent tasks')
@@ -63,14 +72,14 @@ class TaskResultTestCase(TestCase):
 
         queryset = TaskResult.objects.order_by('-created')[:25]
         response = self.client.get(reverse('tasks:recent'))
+        self.assertEqual(response.context['task_results'][0], task2,
+            'newest task should be listed first')
+        template_names = [templ.name for templ in response.templates]
+        self.assert_('taskresult/recent.html' in template_names)
+        self.assert_('taskresult/snippets/display_task.html' in template_names)
         self.assertContains(response, task1.label)
         self.assertContains(response, task2.label)
         self.assertContains(response, 'href="%s"' % task1.url)
         self.assertContains(response, 'href="%s"' % task2.url)
         self.assertContains(response, 'PENDING',        # no actual task, shows as pending
             msg_prefix='task status should be displayed in list')
-        self.assertEqual(response.context['task_results'][0], task2,
-            'newest task should be listed first')
-        template_names = [templ.name for templ in response.templates]
-        self.assert_('taskresult/recent.html' in template_names)
-        self.assert_('taskresult/snippets/display_task.html' in template_names)
