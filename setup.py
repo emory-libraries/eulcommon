@@ -44,7 +44,7 @@ test_requirements = [
     'django-celery',
 ]
 
-dev_requirements = test_requirements + ['django', 'sphinx']
+dev_requirements = test_requirements + ['django<1.9', 'sphinx']
 
 setup(
     name='eulcommon',
