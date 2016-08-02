@@ -1,0 +1,16 @@
+{% load static %}
+ <style type="text/css">
+    #task-results li {
+        list-style-type: circle;
+        margin-left:15px;
+        background: none;
+        padding: 0px 0px 10px 5px;
+    }
+    #task-results .task-success { list-style-image: url('{% static 'images/check.png' %}'); }
+    #task-results .task-failure { list-style-image: url('{% static 'images/x.png' %}'); }
+
+    #task-results .task-success .code { color: green; font-weight:bold }
+    #task-results .task-failure .code { color: red; font-weight:bold  }
+    #task-results .task-result { display:block;}
+    #task-results .detail { border:0px; padding: 0px; margin:0px; font-size: 90%; }
+</style>

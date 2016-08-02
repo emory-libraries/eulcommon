@@ -17,12 +17,17 @@
 # django settings file for unit tests
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+DEBUG = True
+TEMPLATE_DEBUG = True
+
 SECRET_KEY = 'not that secret but is now required!~'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'eulcommon-test.db'
+        'NAME': os.path.join(BASE_DIR, 'eulcommon-test.db')
     }
 }
 
@@ -31,10 +36,50 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'eulcommon',
+    'eulcommon.djangoextras.taskresult',
 ]
 
 
-# suppress normal template context processing
-# for tests that render templates
-TEMPLATE_CONTEXT_PROCESSORS = []
+# context processors required for taskresult tests
+TEMPLATE_CONTEXT_PROCESSORS = [
+    "django.contrib.auth.context_processors.auth",
+    "django.template.context_processors.debug",
+    "django.template.context_processors.i18n",
+    "django.template.context_processors.media",
+    "django.template.context_processors.static",
+    "django.template.context_processors.tz",
+    "django.contrib.messages.context_processors.messages"
+]
 
+TEMPLATE_DIRS = [
+    os.path.join(BASE_DIR, 'templates'),
+    # includes 403.html template
+    os.path.join(BASE_DIR, 'test_djangoextras', 'fixtures'),
+]
+
+TEMPLATE_LOADERS = [
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader'
+]
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'DIRS': TEMPLATE_DIRS
+    },
+]
+
+ROOT_URLCONF = 'test_urls'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'eulcommon-test-cache',
+    }
+}
+
+# celery config for taskresult
+CELERY_ALWAYS_EAGER = True
+CELERY_RESULT_BACKEND = 'djcelery.backends.cache:CacheBackend'
