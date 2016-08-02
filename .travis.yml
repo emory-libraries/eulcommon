@@ -17,7 +17,6 @@ install:
   - pip install -e ".[test]"
   - pip install -q $DJANGO
   - pip install coveralls
-  - setenv
 
 script:
   - py.test --cov=eulcommon
