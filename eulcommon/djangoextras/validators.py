@@ -33,22 +33,22 @@ class FileTypeValidator(object):
     :param message: optional error validation error message
 
     Example use::
-    
-    	pdf = forms.FileField(label="PDF",
-        	validators=[FileTypeValidator(types=["application/pdf"],
-	                    message="Upload a valid PDF document.")])
+
+        pdf = forms.FileField(label="PDF",
+            validators=[FileTypeValidator(types=["application/pdf"],
+                        message="Upload a valid PDF document.")])
 
     '''
     allowed_types = []
 
-    def __init__(self, types=[], message=None):
-        self.allowed_types = types
+    def __init__(self, types=None, message=None):
+        self.allowed_types = types or []
         if message is not None:
             self.message = message
         else:
             self.message = 'Upload a file in an allowed format: %s' % \
                            ', '.join(self.allowed_types)
-            
+
         self.mime = magic.Magic(mime=True)
 
     def __call__(self, data):
@@ -56,12 +56,12 @@ class FileTypeValidator(object):
         Validates that the input matches the specified mimetype.
 
         :param data: file data, expected to be an instance of
-	    :class:`django.core.files.uploadedfile.UploadedFile`;
-	    handles both
-	    :class:`~django.core.files.uploadedfile.TemporaryUploadedFile`
+        :class:`django.core.files.uploadedfile.UploadedFile`;
+            handles both
+        :class:`~django.core.files.uploadedfile.TemporaryUploadedFile`
             and :class:`~django.core.files.uploadedfile.InMemoryUploadedFile`.
         """
-        # FIXME: check that data is an instance of 
+        # FIXME: check that data is an instance of
         # django.core.files.uploadedfile.UploadedFile ?
 
         # temporary file uploaded to disk (i.e., handled TemporaryFileUploadHandler)
@@ -76,6 +76,6 @@ class FileTypeValidator(object):
                 content = data['content']
             mimetype = self.mime.from_buffer(content)
 
-        type, separator, options = mimetype.partition(';')
-        if type not in self.allowed_types:
+        mtype, separator, options = mimetype.partition(';')
+        if mtype not in self.allowed_types:
             raise ValidationError(self.message)

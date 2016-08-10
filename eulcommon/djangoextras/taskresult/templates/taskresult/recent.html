@@ -1,0 +1,27 @@
+{% extends "site_base.html" %}
+
+{% block page-subtitle %}: Tasks : Recently completed{% endblock %}
+{% block content-title %}Recently completed tasks{% endblock %}
+
+{% block style %}
+  {{ block.super }}
+   {% include 'taskresult/snippets/task_styles.html' %}
+{% endblock %}
+
+{% block content-body %}
+<div id="task-results">
+   <h3>Task Results</h3>
+   {# link to full list in django-admin if available #}
+   {% url 'admin:taskresult_taskresult_changelist' as taskresult_changelist %}
+   {% if taskresult_changelist %}
+   <p><a href="{{ taskresult_changelist }}">[view all]</a></p>
+   {% endif %}
+   <ul>
+      {% for r in task_results %}
+        {% include 'taskresult/snippets/display_task.html' with result=r %}
+      {% empty %}
+        <li>No recent tasks.</li>
+      {% endfor %}
+   </ul>
+</div>
+{% endblock %}

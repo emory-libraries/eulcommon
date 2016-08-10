@@ -19,8 +19,6 @@
 import re
 import unittest
 
-from testcore import main
-
 from django import forms
 from django.conf import settings
 from django.forms import ValidationError

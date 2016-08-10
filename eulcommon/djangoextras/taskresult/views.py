@@ -1,6 +1,6 @@
-# file test_binfile/__init__.py
-# 
-#   Copyright 2011 Emory University Libraries
+# file eulcommon/djangoextras/taskresult/views.py
+#
+#   Copyright 2013,2016 Emory University General Library
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -14,6 +14,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from test_binfile.test_core import *
-from test_binfile.test_eudora import *
-from test_binfile.test_outlookexpress import *
+
+from django.views.generic import ListView
+
+from .models import TaskResult
+
+
+class RecentTaskList(ListView):
+    queryset = TaskResult.objects.order_by('-created')[:25]
+    context_object_name = 'task_results'
+    template_name = 'taskresult/recent.html'

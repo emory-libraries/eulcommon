@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # file test_binfile/test_core.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ import os
 import mmap
 
 from eulcommon import binfile
-from testcore import main
+
 
 TEST_ROOT = os.path.dirname(__file__)
 def fixture(fname):
@@ -46,9 +46,9 @@ class BinaryStructureTest(unittest.TestCase):
         obj = binfile.BinaryStructure(mm=mm)
         self.assertEqual(obj.mmap[0], '\x00')
         self.assertEqual(obj.mmap[1], '\x01')
-        
+
     # we test offset below: it's only used implicitly by fields
-        
+
 
 class TestObject(binfile.BinaryStructure):
     byte = binfile.ByteField(0, 2)

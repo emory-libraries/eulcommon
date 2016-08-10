@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 # file test_searchutil.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +18,7 @@ import unittest
 from django.core.paginator import Paginator
 from eulcommon.searchutil import search_terms, parse_search_terms, \
      pages_to_show
-from testcore import main
+
 
 class SearchTermsTest(unittest.TestCase):
 
@@ -44,7 +42,7 @@ class SearchTermsTest(unittest.TestCase):
                          search_terms(' one two:three four'))
         self.assertEqual(['one', 'two:"three\tfour"', 'five'],
                          search_terms(' one two:"three\tfour" five'))
-        
+
 
     def test_phrases(self):
         # quoted phrases
@@ -92,10 +90,10 @@ class ParseSearchTermsTest(unittest.TestCase):
     def test_fields(self):
         self.assertEqual([('title', 'willows')],
                          parse_search_terms('title:willows'))
-        
+
         self.assertEqual([('title', 'willows'), ('title', 'wind')],
                          parse_search_terms('title:willows title:wind'))
-        
+
         self.assertEqual([(None, 'frog'), (None, 'toad'), ('title', 'willows'),
                           ('title', 'wind')],
                          parse_search_terms('frog toad title:willows title:wind'))
@@ -117,7 +115,7 @@ class PagesToShowTest(unittest.TestCase):
         pages = pages_to_show(paginator, 1, {1: 'one', 2: 'two'})
         self.assertEqual('one', pages[1])
         self.assertEqual('two', pages[2])
-        self.assertEqual('6', pages[6])  # default because not specified 
+        self.assertEqual('6', pages[6])  # default because not specified
 
         pages = pages_to_show(paginator, 2)
         self.assert_(1 in pages, "show pages for page 2 includes 1")

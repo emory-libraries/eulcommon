@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # file eulcommon/searchutil.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,11 +28,12 @@ logger = logging.getLogger(__name__)
 
 # lex rules
 
-tokens = ('WORD', 'PHRASE', 'COLON', 'SPACE') 
+tokens = ('WORD', 'PHRASE', 'COLON', 'SPACE')
 
 t_COLON = r':'
 t_SPACE = r'\s+'
 t_WORD = r'[^\s:"]+'
+
 
 @lex.TOKEN(r'"[^"]*"')
 def t_PHRASE(t):
@@ -40,11 +41,13 @@ def t_PHRASE(t):
     t.value = t.value[1:-1]
     return t
 
+
 def t_error(t):
     logger.debug('skipping illegal/unmatched character ' + repr(t.value[0]))
     t.lexer.skip(1)
 
 # parse rules
+
 
 def p_terms_empty(p):
     '''
@@ -58,11 +61,13 @@ def p_terms_single(p):
     '''
     p[0] = [p[1]]
 
+
 def p_terms_leading_space(p):
     '''
     Terms : SPACE Terms
     '''
     p[0] = p[2]
+
 
 def p_terms_multiple(p):
     '''
@@ -71,12 +76,14 @@ def p_terms_multiple(p):
     p[0] = [p[1]]
     p[0].extend(p[3])
 
+
 def p_term_single(p):
     '''
     Term : WORD
-    	 | PHRASE
+         | PHRASE
     '''
     p[0] = (None, p[1])
+
 
 def p_term_field(p):
     '''
@@ -85,9 +92,10 @@ def p_term_field(p):
     '''
     p[0] = (p[1], p[3])
 
+
 def p_term_incomplete_field(p):
     '''
-    Term : WORD COLON 
+    Term : WORD COLON
     '''
     p[0] = (p[1], None)
 
@@ -97,6 +105,7 @@ def p_error(p):
 
 searchlexer = lex.lex()
 searchparser = yacc.yacc()
+
 
 def parse_search_terms(q):
     '''Parse a string of search terms into keywords, phrases, and
@@ -112,9 +121,10 @@ def parse_search_terms(q):
     Would result in::
 
       [(None,'grahame'), (None, 'frog and toad'), ('title', 'willows')]
-    
+
     '''
     return searchparser.parse(q, lexer=searchlexer)
+
 
 def search_terms(q):
     '''Takes a search string and parses it into a list of keywords and
@@ -125,7 +135,7 @@ def search_terms(q):
     values = []
     for t in tokens:
         # word/phrase
-        if t[0] is None:  
+        if t[0] is None:
             values.append(t[1])
         # incomplete field
         elif t[1] is None:
@@ -138,27 +148,29 @@ def search_terms(q):
         else:
             values.append('%s:%s' % t)
     return values
-    return [t[1] if t[0] is None else '%s:"%s"' % t for t in tokens]
 
 
-def pages_to_show(paginator, page, page_labels={}):
+def pages_to_show(paginator, page, page_labels=None):
     """Generate a dictionary of pages to show around the current page. Show
     3 numbers on either side of the specified page, or more if close to end or
     beginning of available pages.
 
     :param paginator: django :class:`~django.core.paginator.Paginator`,
-    	populated with objects
+        populated with objects
     :param page: number of the current page
     :param page_labels: optional dictionary of page labels, keyed on page number
     :rtype: dictionary; keys are page numbers, values are page labels
-    """    
-    show_pages = {} # FIXME; do we need OrderedDict here ? 
+    """
+    show_pages = {}  # FIXME; do we need OrderedDict here ?
+    if page_labels is None:
+        page_labels = {}
+
     def get_page_label(index):
         if index in page_labels:
             return page_labels[index]
         else:
             return unicode(index)
-        
+
     if page != 1:
         before = 3      # default number of pages to show before the current page
         if page >= (paginator.num_pages - 3):   # current page is within 3 of end
@@ -168,7 +180,7 @@ def pages_to_show(paginator, page, page_labels={}):
             if (page - i) >= 1:
                 # if there is a page label available, use that as dictionary value
                 show_pages[page - i] = get_page_label(page - i)
-                
+
     # show up to 3 to 7 numbers after the current number, depending on
     # how many we already have
     for i in range(7 - len(show_pages)):

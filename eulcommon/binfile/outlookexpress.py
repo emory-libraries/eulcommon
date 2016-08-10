@@ -42,7 +42,7 @@ class MacIndex(binfile.BinaryStructure):
     '''Magic Number for Outlook Express 4.5 Mac Index file'''
     _magic_num = binfile.ByteField(0, 4)
     # first four bytes should match magic number
-    
+
     header_length = 28  # 28 bytes at beginning of header
     '''length of the binary header at the beginning of the Index file'''
 
@@ -50,14 +50,14 @@ class MacIndex(binfile.BinaryStructure):
     '''number of email messages in this folder'''
     # seems to be number of messages in the folder (or close, anyway)
 
-    
+
     def sanity_check(self):
         if self._magic_num != self.MAGIC_NUMBER:
             logger.debug('Index file sanity check failed')
-            
+
         return self._magic_num == self.MAGIC_NUMBER
 
-    
+
     @property
     def messages(self):
         '''A generator yielding the :class:`MacIndexMessage`
@@ -70,12 +70,12 @@ class MacIndex(binfile.BinaryStructure):
         # sequence until we have returned the number of messages in
         # this folder, ignoring the minimal message information at the
         # end of the file.
-        
+
         offset = self.header_length # initial offset
         # how much of the data in this file we expect to use, based on
         # the number of messages in this folder and the index message block size
         maxlen = self.header_length + self.total_messages * MacIndexMessage.LENGTH
-        while offset < maxlen: 
+        while offset < maxlen:
              yield MacIndexMessage(mm=self.mmap, offset=offset)
              offset += MacIndexMessage.LENGTH
 
@@ -104,7 +104,7 @@ class MacMail(binfile.BinaryStructure):
     '''Magic Number for a mail content file within an Outlook Express
     4.5 for Macintosh folder'''
     _magic_num = binfile.ByteField(0, 4)  # should match magic number
-    
+
     def sanity_check(self):
         if self._magic_num != self.MAGIC_NUMBER:
             logger.debug('Mail file sanity check failed')
@@ -135,9 +135,9 @@ class MacMailMessage(binfile.BinaryStructure):
     the a size parameter, so that the correct content can be returned.
 
     :param size: size of this message (as determined by
-	:attr:`MacIndexMessage.size`); **required** to return
-	:attr:`data` correctly.
-        
+    :attr:`MacIndexMessage.size`); **required** to return
+    :attr:`data` correctly.
+
     '''
     header_type = binfile.ByteField(0, 4)
     '''Each mail message begins with a header, starting with either
@@ -148,7 +148,7 @@ class MacMailMessage(binfile.BinaryStructure):
     'Header string indicating a normal message'
     DELETED_MESSAGE = 'MDel'
     'Header string indicating a deleted message'
-    
+
     content_offset = binfile.IntegerField(5, 8)
     '''offset within this message block where the message summary
     header ends and message content begins'''
@@ -171,7 +171,7 @@ class MacMailMessage(binfile.BinaryStructure):
 
     def as_email(self):
         '''Return message data as a :class:`email.message.Message`
-        object.''' 
+        object.'''
         return email.message_from_string(self.data)
 
 
@@ -217,22 +217,22 @@ class MacFolder(object):
         :class:`MacMail`.'''
         if self.data:
             # offset for first message, at end of Mail data file header
-            last_offset = 24  
+            last_offset = 24
             self.skipped_chunks = 0
-            
+
             for msginfo in self.index.messages:
                 msg = self.data.get_message(msginfo.offset, msginfo.size)
                 # Index file seems to references messages in order by
                 # offset; check for data skipped between messages.
                 if msginfo.offset > last_offset:
-                    logger.debug('Skipped %d bytes between %s (%s) and %s (%s)' % \
-                          (msginfo.offset - last_offset,
+                    logger.debug('Skipped %d bytes between %s (%s) and %s (%s)',
+                           msginfo.offset - last_offset,
                            last_offset, hex(last_offset),
-                           msginfo.offset, hex(msginfo.offset)))
-                    
+                           msginfo.offset, hex(msginfo.offset))
+
                     self.skipped_chunks += 1
                 last_offset = msginfo.offset + msginfo.size
-                                                 
+
                 yield msg
 
     @property
@@ -254,4 +254,3 @@ class MacFolder(object):
             if skip_deleted and raw_msg.deleted:
                 continue
             yield raw_msg.as_email()
-

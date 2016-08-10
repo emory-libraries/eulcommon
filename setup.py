@@ -35,6 +35,17 @@ for path, dirs, files in os.walk('eulcommon'):
         package = package_path.replace('/', '.')
         package_data[package].extend(targetfiles)
 
+test_requirements = [
+    'mock',
+    'ply',
+    'pytest',
+    'pytest-cov',
+    'pytest-django',
+    'django-celery',
+]
+
+dev_requirements = test_requirements + ['django<1.9', 'sphinx']
+
 setup(
     name='eulcommon',
     version=__version__,
@@ -47,9 +58,16 @@ setup(
     install_requires=[
         'mimeparse',
         'python-magic',
+        'celery',
     ],
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest', 'django', 'mock'],
+    extras_require={
+        'test': test_requirements,
+        'dev': dev_requirements
+    },
     description='A collection of small python utilities for working with binary files and Django',
     long_description=LONG_DESCRIPTION,
     classifiers=CLASSIFIERS,
-    keywords='Binary data'
+    keywords='Binary data',
 )

@@ -76,7 +76,7 @@ def user_passes_test_with_ajax(test_func, login_url=None,
     Usage is the same as
     :meth:`django.contrib.auth.decorators.user_passes_test`::
 
-    	@user_passes_test_with_ajax(lambda u: u.has_perm('polls.can_vote'), login_url='/loginpage/')
+        @user_passes_test_with_ajax(lambda u: u.has_perm('polls.can_vote'), login_url='/loginpage/')
         def my_view(request):
             ...
 
@@ -90,7 +90,7 @@ def user_passes_test_with_ajax(test_func, login_url=None,
         def _check_user_test(request, *args, **kwargs):
             try:
                 test_result = test_func(request.user, request=request, *args, **kwargs)
-            except TypeError as err:
+            except TypeError:
                 test_result = test_func(request.user)
 
             if test_result:
@@ -106,6 +106,7 @@ def user_passes_test_with_ajax(test_func, login_url=None,
 
         return _check_user_test
     return decorator
+
 
 def login_required_with_ajax(function=None, redirect_field_name=REDIRECT_FIELD_NAME):
     """
@@ -144,4 +145,3 @@ def permission_required_with_ajax(perm, login_url=None):
 
     """
     return user_passes_test_with_ajax(lambda u: u.has_perm(perm), login_url=login_url)
-

@@ -1,6 +1,6 @@
-# file test_djangoextras/__init__.py
-# 
-#   Copyright 2011 Emory University Libraries
+# file eulcommon/djangoextras/taskresult/urls.py
+#
+#   Copyright 2010,2016 Emory University General Library
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -14,7 +14,15 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-from test_djangoextras.test_http import *
-from test_djangoextras.test_auth import *
-from test_djangoextras.test_formfields import *
-from test_djangoextras.test_validators import *
+
+from django.conf.urls import url
+from django.views.generic.base import RedirectView
+
+from .views import RecentTaskList
+
+
+urlpatterns = [
+    url(r'^recent/$', RecentTaskList.as_view(), name='recent'),
+    # no task index page for now, so just redirect to recent
+    url(r'^$', RedirectView.as_view(url='recent/', permanent=True)),
+]

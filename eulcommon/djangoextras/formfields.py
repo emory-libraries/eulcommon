@@ -35,7 +35,7 @@ validate_w3c_date = RegexValidator(W3C_DATE_RE,
 class W3CDateWidget(Widget):
     '''Multi-part date widget that generates three text input boxes for year,
     month, and day.  Expects and generates dates in any of these W3C formats,
-    depending on which fields are filled in: YYYY-MM-DD, YYYY-MM, or YYYY.   
+    depending on which fields are filled in: YYYY-MM-DD, YYYY-MM, or YYYY.
     '''
 
     # based in part on SelectDateWidget from django.forms.extras.widgets
@@ -47,26 +47,26 @@ class W3CDateWidget(Widget):
         '''Generate a single value from multi-part form data.  Constructs a W3C
         date based on values that are set, leaving out day and month if they are
         not present.
-        
-        :param data: dictionary of data submitted by the form 
+
+        :param data: dictionary of data submitted by the form
         :param files: - unused
         :param name: base name of the form field
-        :returns: string value 
+        :returns: string value
         '''
 
         y = data.get(self.year_field % name)
         m = data.get(self.month_field % name)
         d = data.get(self.day_field % name)
-        
+
         if y == 'YYYY':
             y = ''
-        
+
         if m == 'MM':
             m = ''
-            
+
         if d == 'DD':
             d = ''
-        
+
         date = y
         if m:
             date += '-%s' % m
@@ -104,7 +104,7 @@ class W3CDateWidget(Widget):
         # display widget fields in YYYY-MM-DD order to match W3C date format,
         # and putting required field(s) on the left
         output = [year_html, month_html, day_html]
- 
+
         return mark_safe(u' / \n'.join(output))
 
     def create_textinput(self, name, field, value, **extra_attrs):
@@ -130,8 +130,8 @@ class W3CDateWidget(Widget):
         if 'size' in extra_attrs:
             extra_attrs['maxlength'] = extra_attrs['size']
         local_attrs = self.build_attrs(id=field % id_, **extra_attrs)
-        input = TextInput()
-        return input.render(field % name, value, local_attrs)
+        txtinput = TextInput()
+        return txtinput.render(field % name, value, local_attrs)
 
 
 class W3CDateField(CharField):
@@ -157,7 +157,7 @@ class DynamicSelect(Select):
     def __init__(self, attrs=None, choices=None):
         # Skip right over Select and go to its parents. Select just sets
         # self.choices, which will break since it's a property here.
-        super(Select, self).__init__(attrs)
+        super(DynamicSelect, self).__init__(attrs)
 
         if choices is None:
             choices = lambda: ()
@@ -205,7 +205,8 @@ class DynamicChoiceField(ChoiceField):
         super(ChoiceField, self).__init__(widget=widget, *args, **kwargs)
 
     def _get_choices(self):
-    	return self._choices()
+        return self._choices()
+
     def _set_choices(self, choices):
         # if choices is updated, update the widget choice callable also
         self._choices = choices

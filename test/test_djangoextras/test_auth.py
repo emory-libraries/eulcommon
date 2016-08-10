@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 # file test_djangoextras/test_auth.py
-# 
+#
 #   Copyright 2011 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +13,6 @@
 #   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
-
-from testcore import main
 
 from mock import Mock
 from os import path
@@ -36,7 +32,7 @@ staff_user = Mock(spec=User, name='MockStaffUser')
 staff_user.username = 'staff'
 staff_user.is_authenticated.return_value = True
 staff_user.has_perm.return_value = False
-        
+
 super_user = Mock(spec=User, name='MockSuperUser')
 super_user.username = 'super'
 super_user.is_authenticated.return_value = True
@@ -56,10 +52,10 @@ class PermissionRequired403_Test(TestCase):
 
         self.staff_user = staff_user
         self.super_user = super_user
-        
+
         self._template_dirs = settings.TEMPLATE_DIRS
         settings.TEMPLATE_DIRS = (
-            path.join(path.dirname(path.abspath(__file__)), 'fixtures'), 
+            path.join(path.dirname(path.abspath(__file__)), 'fixtures'),
         )
 
         # decorate simple view above for testing
@@ -71,7 +67,7 @@ class PermissionRequired403_Test(TestCase):
         # restore any configured template dirs
         settings.TEMPLATE_DIRS = self._template_dirs
 
-    def test_anonymous(self):        
+    def test_anonymous(self):
         response = self.decorated(self.request)
         self.assert_(response['Location'].startswith(self.login_url),
                 "decorated view redirects to login page for non-logged in user")
@@ -84,7 +80,7 @@ class PermissionRequired403_Test(TestCase):
         # set request to use staff user
         self.request.user = self.staff_user
         response = self.decorated(self.request)
-        
+
         expected, got = 403, response.status_code
         self.assertEqual(expected, got,
                 "expected status code %s but got %s for decorated view with logged-in user without perms" \
@@ -103,6 +99,12 @@ class PermissionRequired403_Test(TestCase):
         self.assert_("Hello, World" in response.content,
                      "response should contain actual view content")
 
+
+# test function for use with user_passes test methods
+def is_staff(user):
+    return user.username == 'staff'
+
+
 class UserPassesTest403_Test(TestCase):
     fixtures =  ['users']
 
@@ -120,7 +122,7 @@ class UserPassesTest403_Test(TestCase):
 
         # decorate simple view above for testing
         self.login_url = '/my/login/page'
-        decorator = user_passes_test_with_403(lambda u: u.username == 'staff')
+        decorator = user_passes_test_with_403(is_staff)
         self.decorated = decorator(simple_view)
 
     def tearDown(self):
@@ -144,8 +146,9 @@ class UserPassesTest403_Test(TestCase):
         self.assert_("Hello, World" in response.content,
                      "response should contain actual view content")
 
+
 class UserPassesTestWithAjaxTest(TestCase):
-    fixtures =  ['users']
+    fixtures = ['users']
 
     def setUp(self):
         self.request = HttpRequest()
@@ -161,7 +164,7 @@ class UserPassesTestWithAjaxTest(TestCase):
 
         # decorate simple view above for testing
         # - generic view
-        decorator = user_passes_test_with_ajax(lambda u: u.username == 'staff')
+        decorator = user_passes_test_with_ajax(is_staff)
         self.decorated = decorator(simple_view)
 
         # login required variant

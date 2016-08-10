@@ -1,7 +1,5 @@
-#!/usr/bin/env python
-
 # file test_binfile/test_outlookexpress.py
-# 
+#
 #   Copyright 2012 Emory University Libraries
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +19,7 @@ import unittest
 import os
 
 from eulcommon.binfile import outlookexpress
-from testcore import main
+
 
 TEST_ROOT = os.path.dirname(__file__)
 # Outlook Express 4.5 Mac folder directory inside fixtures directory
@@ -30,7 +28,7 @@ FIXTURE_FOLDER = os.path.join(TEST_ROOT, 'fixtures', 'oemacfolder')
 class TestMacIndex(unittest.TestCase):
     index_filename = os.path.join(FIXTURE_FOLDER, 'Index')
     data_filename = os.path.join(FIXTURE_FOLDER, 'Mail')
-    
+
     def test_basic_properties(self):
         idx = outlookexpress.MacIndex(self.index_filename)
 
@@ -54,7 +52,7 @@ class TestMacIndex(unittest.TestCase):
 class TestMacIndex(unittest.TestCase):
     index_filename = os.path.join(FIXTURE_FOLDER, 'Index')
     data_filename = os.path.join(FIXTURE_FOLDER, 'Mail')
-    
+
     def test_basic_properties(self):
         data = outlookexpress.MacMail(self.data_filename)
 
@@ -108,11 +106,11 @@ class TestMacFolder(unittest.TestCase):
         self.assertEqual(self.folder.count, len(raw_msgs))
         self.assert_(isinstance(raw_msgs[0], outlookexpress.MacMailMessage))
         self.assertFalse(raw_msgs[0].deleted)
-        
+
         # skipped chunks should be populated now; 0 for fixture folder
         self.assertEqual(0, self.folder.skipped_chunks)
-        
 
-                          
+
+
 if __name__ == '__main__':
     main()

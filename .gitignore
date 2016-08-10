@@ -3,3 +3,10 @@ dist
 *.egg-info
 *.pyc
 test-results
+.coverage
+.cache
+unittests.xml
+parser.out
+parsetab.py
+.eggs
+test/*.db
