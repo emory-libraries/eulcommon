@@ -1,6 +1,20 @@
 EULcommon
 =========
 
+**package**
+  .. image:: https://img.shields.io/pypi/v/eulcommon.svg
+     :target: https://pypi.python.org/pypi/eulcommon
+
+  .. image:: https://img.shields.io/github/license/emory-libraries/eulcommon.svg
+
+  .. image:: https://img.shields.io/pypi/dm/eulcommon.svg
+
+**documentation**
+  .. image:: https://readthedocs.org/projects/eulcommon/badge/?version=master
+    :target: http://eulcommon.readthedocs.io
+    :alt: Documentation Status
+
+**code**
   .. image:: https://travis-ci.org/emory-libraries/eulcommon.svg?branch=master
      :target: https://travis-ci.org/emory-libraries/eulcommon
      :alt: Travis-CI Build
