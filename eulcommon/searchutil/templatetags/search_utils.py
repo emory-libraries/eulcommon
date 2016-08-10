@@ -28,7 +28,7 @@ def pagination_links(paginator_page, show_pages, url_params=None,
       {% load search_utils %}
 
       {% pagination_links paged_items show_pages  %}
-     
+
     '''
     return {
         'items': paginator_page,
@@ -38,4 +38,3 @@ def pagination_links(paginator_page, show_pages, url_params=None,
         'last_page_label': last_page_label,
         'page_url': page_url,
         }
-

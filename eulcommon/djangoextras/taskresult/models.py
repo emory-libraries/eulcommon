@@ -92,19 +92,21 @@ def taskresult_start(sender, task_id, **kwargs):
         tr = TaskResult.objects.get(task_id=task_id)
         tr.task_start = datetime.now()
         tr.save()
-    except Exception as e:
-        logger.error("Error saving task start time: %s" % e)
+    except Exception as err:
+        logger.error("Error saving task start time: %s", err)
         logger.debug("Stack trace for task start time error:\n" + traceback.format_exc())
+
 task_prerun.connect(taskresult_start)
+
 
 def taskresult_end(sender, task_id, **kwargs):
     try:
         tr = TaskResult.objects.get(task_id=task_id)
         tr.task_end = datetime.now()
         tr.save()
-    except Exception as e:
-        logger.error("Error saving task end time: %s" % e)
+    except Exception as err:
+        logger.error("Error saving task end time: %s", err)
         logger.debug("Stack trace for task end time error:\n" + traceback.format_exc())
-task_postrun.connect(taskresult_end)
 
+task_postrun.connect(taskresult_end)
 

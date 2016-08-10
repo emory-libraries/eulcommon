@@ -1,20 +1,20 @@
 EULcommon
 =========
 
-  .. image:: https://travis-ci.org/emory-libraries/eulcommon.svg?branch=develop
+  .. image:: https://travis-ci.org/emory-libraries/eulcommon.svg?branch=master
      :target: https://travis-ci.org/emory-libraries/eulcommon
      :alt: Travis-CI Build
 
-  .. image:: https://coveralls.io/repos/github/emory-libraries/eulcommon/badge.svg?branch=develop
-     :target: https://coveralls.io/github/emory-libraries/eulcommon?branch=develop
+  .. image:: https://coveralls.io/repos/github/emory-libraries/eulcommon/badge.svg?branch=master
+     :target: https://coveralls.io/github/emory-libraries/eulcommon?branch=master
      :alt: Code Coverage
 
-  .. image:: https://landscape.io/github/emory-libraries/eulcommon/develop/landscape.svg?style=flat
-     :target: https://landscape.io/github/emory-libraries/eulcommon/develop
+  .. image:: https://landscape.io/github/emory-libraries/eulcommon/master/landscape.svg?style=flat
+     :target: https://landscape.io/github/emory-libraries/eulcommon/master
      :alt: Code Health
 
-  .. image:: https://requires.io/github/emory-libraries/eulcommon/requirements.svg?branch=develop
-     :target: https://requires.io/github/emory-libraries/eulcommon/requirements/?branch=develop
+  .. image:: https://requires.io/github/emory-libraries/eulcommon/requirements.svg?branch=master
+     :target: https://requires.io/github/emory-libraries/eulcommon/requirements/?branch=master
      :alt: Requirements Status
 
 EULcommon is a `Python <http://www.python.org/>`_ module with a few
