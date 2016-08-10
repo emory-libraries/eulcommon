@@ -39,10 +39,12 @@ test_requirements = [
     'mock',
     'ply',
     'pytest',
-    'pytest-cov'
+    'pytest-cov',
+    'pytest-django',
+    'django-celery',
 ]
 
-dev_requirements = test_requirements + ['django', 'sphinx']
+dev_requirements = test_requirements + ['django<1.9', 'sphinx']
 
 setup(
     name='eulcommon',
@@ -56,6 +58,7 @@ setup(
     install_requires=[
         'mimeparse',
         'python-magic',
+        'celery',
     ],
     setup_requires=['pytest-runner'],
     tests_require=['pytest', 'django', 'mock'],
@@ -66,5 +69,5 @@ setup(
     description='A collection of small python utilities for working with binary files and Django',
     long_description=LONG_DESCRIPTION,
     classifiers=CLASSIFIERS,
-    keywords='Binary data'
+    keywords='Binary data',
 )

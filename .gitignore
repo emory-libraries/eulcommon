@@ -9,3 +9,4 @@ unittests.xml
 parser.out
 parsetab.py
 .eggs
+test/*.db

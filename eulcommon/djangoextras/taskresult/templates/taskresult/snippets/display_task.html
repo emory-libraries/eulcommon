@@ -1,0 +1,15 @@
+<li class="task-{{result.task.status|lower}}">
+    {{ result.label }} for <a href="{{ result.url }}">{{ result.object_id }}</a>
+
+    - <span class="code">{{ result.task.status }}</span>
+    <span class="task-result">{{ result.task.result|default:'' }}</span> {# suppress boolean result if possible #}
+    <div class="detail">
+        {% if result.task_end %}
+            Completed {{ result.task_end|timesince }} ago{% if result.duration %},
+            took {{ result.duration }} {% endif %}
+        {% else %}
+            Queued {{ result.created|timesince }} ago.
+            {% if result.task_start %} Started {{ result.task_start|timesince }} ago. {% endif %}
+        {% endif %}
+    </div>
+</li>
