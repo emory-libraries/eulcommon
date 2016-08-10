@@ -34,15 +34,15 @@ class FileTypeValidator(object):
 
     Example use::
 
-    	pdf = forms.FileField(label="PDF",
-        	validators=[FileTypeValidator(types=["application/pdf"],
-	                    message="Upload a valid PDF document.")])
+        pdf = forms.FileField(label="PDF",
+            validators=[FileTypeValidator(types=["application/pdf"],
+                        message="Upload a valid PDF document.")])
 
     '''
     allowed_types = []
 
-    def __init__(self, types=[], message=None):
-        self.allowed_types = types
+    def __init__(self, types=None, message=None):
+        self.allowed_types = types or []
         if message is not None:
             self.message = message
         else:

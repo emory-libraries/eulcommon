@@ -211,13 +211,13 @@ class IntegerField(ByteField):
         # strings. Draw on our ByteField parent to get the bytes underlying
         # this number field, and then interpret those bytes as a number.
 
-        bytes = ByteField.__get__(self, obj, owner)
+        byte_data = ByteField.__get__(self, obj, owner)
         val = 0
         # we only support big-endian for now. big-endian integers are sort
         # of like base-256 numbers. in base 10 to get from 432 to 4326 we
         # multiply by 10 and add 6. so in base 256 we multiply by 256 and
         # add our next byte.
-        for byte in bytes:
+        for byte in byte_data:
             val *= 256
             val += ord(byte)
         return val

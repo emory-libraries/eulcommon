@@ -150,7 +150,7 @@ def search_terms(q):
     return values
 
 
-def pages_to_show(paginator, page, page_labels={}):
+def pages_to_show(paginator, page, page_labels=None):
     """Generate a dictionary of pages to show around the current page. Show
     3 numbers on either side of the specified page, or more if close to end or
     beginning of available pages.
@@ -162,6 +162,8 @@ def pages_to_show(paginator, page, page_labels={}):
     :rtype: dictionary; keys are page numbers, values are page labels
     """
     show_pages = {}  # FIXME; do we need OrderedDict here ?
+    if page_labels is None:
+        page_labels = {}
 
     def get_page_label(index):
         if index in page_labels:
