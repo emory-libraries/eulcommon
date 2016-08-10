@@ -9,6 +9,8 @@ any necessary information about installation or upgrade notes.
 ----
 
 * Update tests for current versions of Django and to use py.test
+* Import taskresult module from eullocal, for storing and displaying
+  information related to celery tasks.
 
 0.18
 ----
