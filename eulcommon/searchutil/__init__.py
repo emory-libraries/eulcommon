@@ -169,7 +169,7 @@ def pages_to_show(paginator, page, page_labels=None):
         if index in page_labels:
             return page_labels[index]
         else:
-            return unicode(index)
+            return str(index)
 
     if page != 1:
         before = 3      # default number of pages to show before the current page
