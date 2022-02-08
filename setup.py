@@ -60,8 +60,7 @@ setup(
         'python-magic',
         'celery',
     ],
-    setup_requires=['pytest-runner'],
-    tests_require=['pytest', 'django', 'mock'],
+    tests_require=['django', 'mock'],
     extras_require={
         'test': test_requirements,
         'dev': dev_requirements
