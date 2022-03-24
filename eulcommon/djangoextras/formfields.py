@@ -129,7 +129,7 @@ class W3CDateWidget(Widget):
         # use size to set maximum length
         if 'size' in extra_attrs:
             extra_attrs['maxlength'] = extra_attrs['size']
-        local_attrs = self.build_attrs({'id':'field % id_'}, **extra_attrs)
+        local_attrs = self.build_attrs(attrs=**extra_attrs, {'id':'field % id_'})
         txtinput = TextInput()
         return txtinput.render(field % name, value, local_attrs)
 
