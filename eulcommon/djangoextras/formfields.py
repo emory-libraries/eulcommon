@@ -164,7 +164,7 @@ class DynamicSelect(Select):
         self._choices = choices
 
     def _get_choices(self):
-        return self._choices()
+        return self._choices
     def _set_choices(self, choices):
         self._choices = choices
     choices = property(_get_choices, _set_choices)
