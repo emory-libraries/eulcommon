@@ -205,7 +205,7 @@ class DynamicChoiceField(ChoiceField):
         super(ChoiceField, self).__init__(widget=widget, *args, **kwargs)
 
     def _get_choices(self):
-        return self._choices()
+        return self._choices
 
     def _set_choices(self, choices):
         # if choices is updated, update the widget choice callable also
